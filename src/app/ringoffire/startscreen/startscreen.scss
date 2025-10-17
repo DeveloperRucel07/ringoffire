@@ -1,0 +1,193 @@
+
+$card-count: 4;             // number of cards (match your <img> count)
+$container-size: 420px;     // .start-game width/height
+$img-width: 420px;          // card dimensions
+$img-height: 570px;
+$duration: 5s;            // single card animation duration
+$stagger: 0.18s;            // delay between each dealt card
+$iteration: 1;              // 1 for play once, or 'infinite' to loop
+
+
+.start-game {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  display: block;
+    &:hover{
+        >button{
+            z-index: 1000;
+        }
+    }
+}
+
+.start-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80px;
+    font-size: 45px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Poppins', sans-serif;
+
+    // colors
+    $main-color: #ffcc00;
+    $hover-color: #ffe257;
+    $text-color: #1b1b1b;
+    $shadow-color: rgba(255, 204, 0, 0.6);
+
+    background: linear-gradient(180deg, lighten($main-color, 10%) 0%, darken($main-color, 10%) 100%);
+    color: $text-color;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), 0 0 25px $shadow-color;
+    cursor: pointer;
+    outline: none;
+
+    transition:
+        transform 0.15s cubic-bezier(.2, .9, .3, 1),
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+
+    &:hover {
+        background: linear-gradient(180deg, $hover-color 0%, lighten($hover-color, 10%) 100%);
+        transform: translate(-50%, -50%) scale(1.05);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 35px lighten($shadow-color, 10%);
+    }
+
+    &:active {
+        transform: translate(-50%, -50%) scale(0.97);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Optional glow animation */
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.3), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover::before {
+        opacity: 1;
+        animation: pulse-glow 1.4s infinite ease-in-out alternate;
+    }
+
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.2); }
+        100% { box-shadow: 0 0 25px 6px rgba(255, 255, 255, 0.4); }
+    }
+}
+
+
+/* Cards */
+.start-game img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: $img-width;
+  height: $img-height;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  transform-origin: 50% 50%;
+  transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+  will-change: transform, opacity;
+  opacity: 0;
+
+  animation-name: deal-anim;
+  animation-duration: $duration;
+  animation-timing-function: cubic-bezier(.2,.9,.3,1);
+  animation-fill-mode: both; 
+  animation-iteration-count: $iteration;
+}
+
+@for $i from 1 through $card-count {
+    .start-game img:nth-child(1) {
+        animation-delay: 0s;
+        --final-x: -70px;  
+        --final-y: 10px;   
+        --final-rot: -12deg; 
+        z-index: 11;
+    }
+
+    .start-game img:nth-child(2) {
+        animation-delay: 0.18s;
+        --final-x: -25px;
+        --final-y: 10px;
+        --final-rot: -6deg;
+        z-index: 12;
+    }
+
+    .start-game img:nth-child(3) {
+        animation-delay: 0.36s;
+        --final-x: 25px;
+        --final-y: 10px;
+        --final-rot: 6deg;
+        z-index: 13;
+    }
+
+    .start-game img:nth-child(4) {
+        animation-delay: 0.54s;
+        --final-x: 70px;
+        --final-y: 10px;
+        --final-rot: 12deg;
+        z-index: 14;
+    }
+
+}
+
+/*
+   Each card flies in one by one and lands in its final spot.
+*/
+@keyframes deal-anim {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -80%) scale(0.5) rotate(-10deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -55%) scale(1.1) rotate(5deg);
+    }
+    80% {
+        transform: translate(-50%, -52%) scale(0.95) rotate(0deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform:
+        translate(-50%, -50%)
+        translate(var(--final-x, 0px), var(--final-y, 0px))
+        rotate(var(--final-rot, 0deg))
+        scale(1);
+    }
+}
+
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .start-game img {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0) scale(1);
+    pointer-events: auto;
+  }
+}
+
+/* responsive tweaks */
+@media (max-width: 480px) {
+  .start-game {
+    width: 320px;
+    height: 320px;
+  }
+  .start-game img {
+    width: 88px;
+    height: 124px;
+  }
+}
