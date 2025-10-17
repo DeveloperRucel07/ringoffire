@@ -1,0 +1,9 @@
+
+<mat-card class="description">
+    @if(title && description){
+        <mat-card-title> {{ title }}</mat-card-title>
+        <mat-card-content>{{ description }} </mat-card-content>
+    }@else{   
+        <mat-card-title>The First Player Should pick a Card!</mat-card-title>
+    }
+</mat-card>

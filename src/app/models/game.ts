@@ -1,8 +1,8 @@
 export class GameModel{
     public players:string[] = [];
     public stack:string[] = [];
-    public playerCard:string[] = [];
-    public currentPlaye:number = 0;
+    public playedCards:string[] = [];
+    public currentPlayer:number = 0;
 
     constructor(){
         this.addAllCards();  

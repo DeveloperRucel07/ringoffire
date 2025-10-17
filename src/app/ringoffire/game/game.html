@@ -1,4 +1,9 @@
 <div class="game-field">
+    @for(player of game.players; track player; let i = $index; ){
+        <app-player class="player-list" [style.top.px]="40*i" [name] = "player" [activePlayer] = "i == game.currentPlayer">
+
+        </app-player>
+    }
     <div class="card-stack">
         <img *ngFor="let c of [0,1,2,3]; let i = index" [ngStyle]="{'right.px': i * 5}" 
             src="../../../../playing_cards/card_cover.png" alt="">
@@ -6,5 +11,14 @@
         @if(pickCardAnimation){
             <img class="pick-card" src="../../../../playing_cards/{{ currentCard }}.png" alt="" style="right: 25px;">
         }
+        @for(card of game.playedCards; track card){
+            <img class="pick-card" src="../../../../playing_cards/{{ card }}.png" alt="" style="right: 25px;">
+        }
     </div>
+    <div class="decision">
+        <app-description [card] = "currentCard" [currentPlayer] = "game.currentPlayer"></app-description>
+    </div>
+    <button matFab aria-label="add button" class="add-button" (click)="openDialog()">
+        <mat-icon>add</mat-icon>
+    </button>
 </div>

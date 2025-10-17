@@ -1,0 +1,29 @@
+.player{
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    position: absolute;
+    gap: 10px;
+    right: 0;
+    img{
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 40px;
+    }
+
+    span{
+        color: mediumpurple;
+        font-size: 18px;
+    }
+}
+
+.active-player{
+    img{
+        width: 45px;
+        height: 45px;
+    }
+    span{
+        color: white !important;
+    }
+}
